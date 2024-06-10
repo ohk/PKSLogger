@@ -121,4 +121,30 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.notice("\(message)")
         }
     }
+
+    /// Logs a warning message.
+    ///
+    /// The `warning` method logs a message at the `error` level if the current log level is set equal to or higher than `error`.
+    /// This method is used for warnings, which indicate potential problems or issues that should be noted.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.example.app", category: "network")
+    /// logger.warning("Slow network response time")
+    /// ```
+    ///
+    /// - Important: This method is not thread-safe. Stored logs are appended on a background queue. Stored logs order is not guaranteed.
+    /// - Warning: This method is not safe for privacy and security. If you want to log sensitive data, please be careful. If you set wrong log level, it can be printed to the console or stored in the logs.
+    /// - Parameter message: The message to log.
+    public func warning(_ message: String) {
+        guard logLevel.rawValue <= OSLogType.error.rawValue else { return }
+        
+        if storeLogs {
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.logs.append(message)
+            }
+        }
+        
+        logger.warning("\(message)")
+    }
 }
