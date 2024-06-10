@@ -144,6 +144,7 @@ public class PKSLoggerManager: ObservableObject {
             category: loggerGlobalConfiguration.category
         )
         loggerGlobalConfiguration = copy
+        changeAllLoggersLogLevel(logLevel)
     }
 
     /// Set the global store logs setting.
@@ -162,6 +163,7 @@ public class PKSLoggerManager: ObservableObject {
             category: loggerGlobalConfiguration.category
         )
         loggerGlobalConfiguration = copy
+        changeAllLoggersStoreLogs(storeLogs)
     }
 
     /// Set the global hide logs setting.
@@ -180,5 +182,36 @@ public class PKSLoggerManager: ObservableObject {
             category: loggerGlobalConfiguration.category
         )
         loggerGlobalConfiguration = copy
+        changeAllLoggersHideLogs(hideLogs)
+    }
+    
+    /// Change all loggers log level.
+    ///
+    /// This function will change all loggers log level.
+    /// - Parameter logLevel: An integer value that indicates the log level.
+    /// - Returns: Void
+    ///
+    private func changeAllLoggersLogLevel(_ logLevel: OSLogType) {
+        loggers.values.forEach({ $0.logLevel = logLevel })
+    }
+    
+    /// Change all loggers hide logs setting.
+    ///
+    /// This function will change all loggers hide logs setting.
+    /// - Parameter hideLogs: A boolean value that indicates whether logs should be hidden or not.
+    /// - Returns: Void
+    ///
+    private func changeAllLoggersHideLogs(_ hideLogs: Bool) {
+        loggers.values.forEach({ $0.hideLogs = hideLogs })
+    }
+    
+    /// Change all loggers store logs setting.
+    ///
+    /// This function will change all loggers store logs setting.
+    /// - Parameter storeLogs: A boolean value that indicates whether logs should be stored or not.
+    /// - Returns: Void
+    ///
+    private func changeAllLoggersStoreLogs(_ storeLogs: Bool) {
+        loggers.values.forEach({ $0.storeLogs = storeLogs })
     }
 }
