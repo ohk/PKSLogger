@@ -203,4 +203,30 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.critical("\(message)")
         }
     }
+
+    /// Logs a fault message.
+    ///
+    /// The `fault` method logs a message at the `fault` level if the current log level is set equal to or higher than `fault`.
+    /// This method is used for fault messages, which indicate catastrophic failures that require immediate attention.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.example.app", category: "network")
+    /// logger.fault("Out of memory error")
+    /// ```
+    ///
+    /// - Important: This method is not thread-safe. Stored logs are appended on a background queue. Stored logs order is not guaranteed.
+    /// - Warning: This method is not safe for privacy and security. If you want to log sensitive data, please be careful. If you set wrong log level, it can be printed to the console or stored in the logs.
+    /// - Parameter message: The message to log.
+    public func fault(_ message: String) {
+        guard logLevel.rawValue <= OSLogType.fault.rawValue else { return }
+        
+        if storeLogs {
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.logs.append(message)
+            }
+        }
+        
+        logger.fault("\(message)")
+    }
 }
