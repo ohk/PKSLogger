@@ -31,7 +31,7 @@ public class PKSLoggerManager: ObservableObject {
     /// This function will initialize the `PKSLoggerManager` with the global logger configuration.
     /// - Returns: Void
     ///
-    private init() {
+    init() {
         let systemConfiguration = userDefaultsManager.loadGlobalLoggerSettings()
         self.loggerGlobalConfiguration = systemConfiguration
         self.systemLogger = PKSLogger(systemConfiguration)
