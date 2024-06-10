@@ -79,6 +79,7 @@ public class PKSLoggerManager: ObservableObject {
             systemLogger.info("PKSLogger | MANAGER | Logger not found in the dictionary. Creating a new logger.")
             let configuration = getLoggerConfiguration(subsystem: subsystem, category: category)
             let logger = PKSLogger(configuration)
+            trackLoggerConfigurationChanges(logger, subsystem, category)
             loggers[key] = logger
             return logger
         }
@@ -108,5 +109,22 @@ public class PKSLoggerManager: ObservableObject {
                 category: category
             )
         }
+    }
+    
+    /// Track logger configuration changes.
+    ///
+    /// This function will track the logger configuration changes and save them to the `UserDefaults`.
+    /// - Parameters:
+    ///  - logger: A `PKSLogger` object.
+    ///  - subsystem: A string value that indicates the subsystem.
+    ///  - category: A string value that indicates the category.
+    private func trackLoggerConfigurationChanges(_ logger: PKSLogger,_ subsystem: String,_ category: String) {
+        logger.$storeLogs
+            .combineLatest(logger.$hideLogs, logger.$logLevel)
+            .sink { [weak self] storeLogsConfiguration, hideLogsConfiguration, logLevelConfiguration in
+                self?.userDefaultsManager.saveLoggerSettings(.init(storeLogs: storeLogsConfiguration, logLevel: logLevelConfiguration, hideLogs: hideLogsConfiguration, subsystem: subsystem, category: category))
+                self?.systemLogger.info("PKSLogger | \(logger.id) | New Logger Configuration detected. Changes saved to UserDefaults.")
+            }
+            .store(in: &cancellables)
     }
 }
