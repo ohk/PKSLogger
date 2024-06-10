@@ -93,4 +93,32 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.debug("\(message)")
         }
     }
+
+    /// Logs a notice message.
+    ///
+    /// The `notice` method logs a message at the `default` level if the current log level is set equal to or higher than `default`.
+    /// This method is used for notices, which are messages that are less important than informational messages but still noteworthy.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.example.app", category: "network")
+    /// logger.notice("User logged in")
+    /// ```
+    ///
+    /// - Important: This method is not thread-safe. Stored logs are appended on a background queue. Stored logs order is not guaranteed.
+    /// - Warning: This method is not safe for privacy and security. If you want to log sensitive data, please be careful. If you set wrong log level, it can be printed to the console or stored in the logs.
+    /// - Parameter message: The message to log.
+    public func notice(_ message: String) {
+        guard logLevel.rawValue <= OSLogType.default.rawValue else { return }
+        
+        if storeLogs {
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.logs.append(message)
+            }
+        }
+        
+        if !hideLogs {
+            logger.notice("\(message)")
+        }
+    }
 }
