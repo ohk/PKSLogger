@@ -37,4 +37,32 @@ public class PKSLogger: ObservableObject, Identifiable {
         self.storeLogs = configuration.storeLogs
         self.hideLogs = configuration.hideLogs
     }
+
+    /// Logs an informational message.
+    ///
+    /// The `info` method logs a message at the `info` level if the current log level is set equal to or higher than `info`.
+    /// This method is typically used for general informational messages that highlight the progress of the application.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.poikus.app", category: "network")
+    /// logger.info("Network request started")
+    /// ```
+    ///
+    /// - Important: This method is not thread-safe. Stored logs are appended on a background queue. Stored logs order is not guaranteed.
+    /// - Warning: This method is not safe for privacy and security. If you want to log sensitive data, please be careful. If you set wrong log level, it can be printed to the console or stored in the logs.
+    /// - Parameter message: The message to log.
+    public func info(_ message: String) {
+        guard logLevel.rawValue <= OSLogType.info.rawValue else { return }
+        
+        if storeLogs {
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.logs.append(message)
+            }
+        }
+        
+        if !hideLogs {
+            logger.info("\(message)")
+        }
+    }
 }
