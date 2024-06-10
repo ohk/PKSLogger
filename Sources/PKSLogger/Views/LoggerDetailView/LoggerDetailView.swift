@@ -1,13 +1,13 @@
 //
-//  SwiftUIView.swift
-//  
+//  LoggerDetailView.swift
+//
 //
 //  Created by Ömer Hamid Kamışlı on 6/9/24.
 //
 
 import SwiftUI
 
-struct SwiftUIView: View {
+struct LoggerDetailView: View {
     @State var logger: PKSLogger
     
     var body: some View {
@@ -33,5 +33,5 @@ struct SwiftUIView: View {
     logger.info("Test 4")
     logger.warning("Test 5")
     logger.fault("Test 6")
-    return SwiftUIView(logger: logger)
+    return LoggerDetailView(logger: logger)
 }
