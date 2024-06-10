@@ -214,4 +214,13 @@ public class PKSLoggerManager: ObservableObject {
     private func changeAllLoggersStoreLogs(_ storeLogs: Bool) {
         loggers.values.forEach({ $0.storeLogs = storeLogs })
     }
+    
+    /// Get all available loggers.
+    ///
+    /// This function will return all available loggers.
+    /// - Returns: An array of `PKSLogger` objects.
+    ///
+    var availableLoggers: [PKSLogger] {
+        return loggers.values.map({ $0 })
+    }
 }
