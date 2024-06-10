@@ -4,6 +4,9 @@
 
 `PKSLogger` is a Swift-based logging utility designed to provide structured logging functionalities for your iOS applications. This project includes various components such as models, views, helpers, and extensions to facilitate efficient and organized logging.
 
+<img src="./assets/settings-view.png" width="300" alt="PKSLogger Settings View">
+<img src="./assets/logs-view.png" width="300" alt="PKSLogger Logs View">
+
 ## Directory Structure
 
 - `PKSLogger.swift`: The main file for the logging utility.
