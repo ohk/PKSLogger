@@ -37,6 +37,26 @@ public class PKSLoggerManager: ObservableObject {
         self.systemLogger = PKSLogger(systemConfiguration)
         // System initialization log
         systemLogger.info("PKSLogger | MANAGER | Log Manager Initialized")
+        trackGlobalConfigurationChanges()
+    }
+    
+    /// Track global configuration changes.
+    ///
+    /// This function will track the global configuration changes and save them to the `UserDefaults`.
+    /// - Returns: Void
+    ///
+    private func trackGlobalConfigurationChanges() {
+        $loggerGlobalConfiguration
+            .sink { [weak self] newConfiguration in
+                self?.systemLogger.hideLogs = newConfiguration.hideLogs
+                self?.systemLogger.storeLogs = newConfiguration.storeLogs
+                self?.systemLogger.logLevel = OSLogType(rawValue: newConfiguration.logLevel)
+
+                self?.userDefaultsManager.saveGlobalLoggerSettings(newConfiguration)
+                self?.systemLogger.info("PKSLogger | MANAGER | New Global Configuration detected. Changes saved to UserDefaults. Changes will be applied to all loggers.")
+            }
+            .store(in: &cancellables)
+            systemLogger.info("PKSLogger | MANAGER | Global Configuration Changes started to track")
     }
     
 }
