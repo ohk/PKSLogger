@@ -229,4 +229,34 @@ public class PKSLogger: ObservableObject, Identifiable {
         
         logger.fault("\(message)")
     }
+
+    /// Logs a message with a specified log level.
+    ///
+    /// The `log` method logs a message at the specified log level if the current log level is set equal to or higher than the specified log level.
+    /// This method allows for logging messages with different levels of severity.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.example.app", category: "network")
+    /// logger.log("Custom log message", logLevel: .debug)
+    /// ```
+    ///
+    /// - Important: This method is not thread-safe. Stored logs are appended on a background queue. Stored logs order is not guaranteed.
+    /// - Warning: This method is not safe for privacy and security. If you want to log sensitive data, please be careful. If you set wrong log level, it can be printed to the console or stored in the logs.
+    /// - Parameters:
+    ///   - message: The message to log.
+    ///   - logLevel: The log level to use.
+    public func log(_ message: String, logLevel: OSLogType) {
+        guard logLevel.rawValue <= logLevel.rawValue, logLevel != .production else { return }
+        
+        if storeLogs {
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.logs.append(message)
+            }
+        }
+        
+        if !hideLogs {
+            logger.log(level: logLevel, "\(message)")
+        }
+    }
 }
