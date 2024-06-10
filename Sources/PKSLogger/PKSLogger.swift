@@ -65,4 +65,32 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.info("\(message)")
         }
     }
+
+    /// Logs a debug message.
+    ///
+    /// The `debug` method logs a message at the `debug` level if the current log level is set equal to or higher than `debug`.
+    /// This method is used for debugging information, which is typically of use only when diagnosing problems.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.example.app", category: "network")
+    /// logger.debug("Received response from server")
+    /// ```
+    ///
+    /// - Important: This method is not thread-safe. Stored logs are appended on a background queue. Stored logs order is not guaranteed.
+    /// - Warning: This method is not safe for privacy and security. If you want to log sensitive data, please be careful. If you set wrong log level, it can be printed to the console or stored in the logs.
+    /// - Parameter message: The message to log.
+    public func debug(_ message: String) {
+        guard logLevel.rawValue <= OSLogType.debug.rawValue else { return }
+        
+        if storeLogs {
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.logs.append(message)
+            }
+        }
+        
+        if !hideLogs {
+            logger.debug("\(message)")
+        }
+    }
 }
