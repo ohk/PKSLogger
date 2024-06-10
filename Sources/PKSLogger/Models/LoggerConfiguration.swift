@@ -27,3 +27,26 @@ extension LoggerConfiguration {
         return "\(subsystem)-\(category)"
     }
 }
+
+// MARK: - LoggerConfiguration Initializers Extension
+extension LoggerConfiguration {
+    /// Initializes a new `LoggerConfiguration` object.
+    /// - Parameters:
+    ///   - storeLogs: A boolean value that indicates whether logs should be stored or not.
+    ///   - logLevel: An integer value that indicates the log level.
+    ///   - hideLogs: A boolean value that indicates whether logs should be hidden or not.
+    /// - Returns: A new `LoggerConfiguration` object.
+    init(
+        storeLogs: Bool,
+        logLevel: OSLogType,
+        hideLogs: Bool,
+        subsystem: String,
+        category: String
+    ) {
+        self.storeLogs = storeLogs
+        self.logLevel = logLevel.rawValue
+        self.hideLogs = hideLogs
+        self.subsystem = subsystem
+        self.category = category
+    }
+}
