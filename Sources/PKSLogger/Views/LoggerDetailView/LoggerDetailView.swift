@@ -21,6 +21,8 @@ struct LoggerDetailView: View {
             }
 
         }
+        .navigationTitle(logger.id)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

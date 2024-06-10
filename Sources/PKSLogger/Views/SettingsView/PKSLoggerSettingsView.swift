@@ -38,29 +38,41 @@ public struct PKSLoggerSettingsView: View {
     
     /// Body of the LoggerSettingsView
     public var body: some View {
-        List {
-            Section {
-                LogLevelPicker(logLevel: $globalLogLevel)
-                StoreLogsToggleView(storeLog: $globalStoreLogs)
-                HideLogsToggleView(hideLogs: $globalHideLogs)
-            } header: {
-                Text("Global Settings")
-                    .font(.headline)
+        NavigationStack {
+            List {
+                Section {
+                    LogLevelPicker(logLevel: $globalLogLevel)
+                    StoreLogsToggleView(storeLog: $globalStoreLogs)
+                    HideLogsToggleView(hideLogs: $globalHideLogs)
+                } header: {
+                    Text("Global Settings")
+                        .font(.headline)
+                }
+                
+                
+                ForEach(loggerManager.availableLoggers) { logger in
+                    SettingsView(sectionName: logger.id, logger: logger) {
+                        NavigationLink {
+                            LoggerDetailView(logger: logger)
+                        } label: {
+                            Label("Show Logs View", systemImage: "doc.text.magnifyingglass")
+                                .font(.footnote)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                    }
+                }
             }
-
-            
-            ForEach(loggerManager.availableLoggers) { logger in
-                SettingsView(sectionName: logger.id, logger: logger)
+            .navigationTitle("PKS Log Manager")
+            .onChange(of: globalLogLevel) { newValue in
+                loggerManager.setGlobalLogLevel(newValue)
             }
-        }
-        .onChange(of: globalLogLevel) { newValue in
-            loggerManager.setGlobalLogLevel(newValue)
-        }
-        .onChange(of: globalStoreLogs) { newValue in
-            loggerManager.setGlobalStoreLogs(newValue)
-        }
-        .onChange(of: globalHideLogs) { newValue in
-            loggerManager.setGlobalHideLogs(newValue)
+            .onChange(of: globalStoreLogs) { newValue in
+                loggerManager.setGlobalStoreLogs(newValue)
+            }
+            .onChange(of: globalHideLogs) { newValue in
+                loggerManager.setGlobalHideLogs(newValue)
+            }
         }
     }
 }
