@@ -259,4 +259,21 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.log(level: logLevel, "\(message)")
         }
     }
+
+    /// Returns the underlying logger instance.
+    ///
+    /// The `getLogger` method returns the underlying `Logger` instance used by this class.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.example.app", category: "network")
+    /// let underlyingLogger = logger.getLogger()
+    /// ```
+    ///
+    /// - Returns: The `Logger` instance.
+    /// - Warning: This method is returning the underlying logger instance. Be careful when using it. When you use the underlying logger instance, you are responsible for the logs. When you use the underlying logger instance, the logs are not stored or hidden. 
+    /// - Tip: If you want to use the logger instance, please use the methods provided by this class.
+    public func getLogger() -> Logger {
+        return logger
+    }
 }
