@@ -175,4 +175,32 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.error("\(message)")
         }
     }
+
+    /// Logs a critical message.
+    ///
+    /// The `critical` method logs a message at the `fault` level if the current log level is set equal to or higher than `fault`.
+    /// This method is used for critical messages, which indicate severe problems that have caused or are about to cause major issues.
+    ///
+    /// - Example:
+    /// ```swift
+    /// let logger = PKSLogger(subsystem: "com.example.app", category: "network")
+    /// logger.critical("Server crash detected")
+    /// ```
+    ///
+    /// - Important: This method is not thread-safe. Stored logs are appended on a background queue. Stored logs order is not guaranteed.
+    /// - Warning: This method is not safe for privacy and security. If you want to log sensitive data, please be careful. If you set wrong log level, it can be printed to the console or stored in the logs.
+    /// - Parameter message: The message to log.
+    public func critical(_ message: String) {
+        guard logLevel.rawValue <= OSLogType.fault.rawValue else { return }
+        
+        if storeLogs {
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.logs.append(message)
+            }
+        }
+        
+        if !hideLogs {
+            logger.critical("\(message)")
+        }
+    }
 }
