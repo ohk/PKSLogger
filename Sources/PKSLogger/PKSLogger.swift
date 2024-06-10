@@ -25,7 +25,7 @@ public class PKSLogger: ObservableObject, Identifiable {
     
     /// The logger instance.
     private var logger: Logger
-
+    
     /// Initializes a new logger with the specified subsystem, category, and log level.
     /// - Parameters:
     ///   - configuration: The configuration of the logger. More details can be found in the ``LoggerConfiguration`` struct.
@@ -37,7 +37,7 @@ public class PKSLogger: ObservableObject, Identifiable {
         self.storeLogs = configuration.storeLogs
         self.hideLogs = configuration.hideLogs
     }
-
+    
     /// Logs an informational message.
     ///
     /// The `info` method logs a message at the `info` level if the current log level is set equal to or higher than `info`.
@@ -65,7 +65,7 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.info("\(message)")
         }
     }
-
+    
     /// Logs a debug message.
     ///
     /// The `debug` method logs a message at the `debug` level if the current log level is set equal to or higher than `debug`.
@@ -93,7 +93,7 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.debug("\(message)")
         }
     }
-
+    
     /// Logs a notice message.
     ///
     /// The `notice` method logs a message at the `default` level if the current log level is set equal to or higher than `default`.
@@ -121,7 +121,7 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.notice("\(message)")
         }
     }
-
+    
     /// Logs a warning message.
     ///
     /// The `warning` method logs a message at the `error` level if the current log level is set equal to or higher than `error`.
@@ -147,7 +147,7 @@ public class PKSLogger: ObservableObject, Identifiable {
         
         logger.warning("\(message)")
     }
-
+    
     /// Logs an error message.
     ///
     /// The `error` method logs a message at the `error` level if the current log level is set equal to or higher than `error`.
@@ -175,7 +175,7 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.error("\(message)")
         }
     }
-
+    
     /// Logs a critical message.
     ///
     /// The `critical` method logs a message at the `fault` level if the current log level is set equal to or higher than `fault`.
@@ -203,7 +203,7 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.critical("\(message)")
         }
     }
-
+    
     /// Logs a fault message.
     ///
     /// The `fault` method logs a message at the `fault` level if the current log level is set equal to or higher than `fault`.
@@ -229,7 +229,7 @@ public class PKSLogger: ObservableObject, Identifiable {
         
         logger.fault("\(message)")
     }
-
+    
     /// Logs a message with a specified log level.
     ///
     /// The `log` method logs a message at the specified log level if the current log level is set equal to or higher than the specified log level.
@@ -259,7 +259,7 @@ public class PKSLogger: ObservableObject, Identifiable {
             logger.log(level: logLevel, "\(message)")
         }
     }
-
+    
     /// Returns the underlying logger instance.
     ///
     /// The `getLogger` method returns the underlying `Logger` instance used by this class.
