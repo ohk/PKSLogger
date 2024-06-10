@@ -127,4 +127,58 @@ public class PKSLoggerManager: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    /// Set the global log level.
+    ///
+    /// This function will set the global log level and save it to the `UserDefaults`.
+    /// - Parameter logLevel: An integer value that indicates the log level.
+    /// - Returns: Void
+    ///
+    public func setGlobalLogLevel(_ logLevel: OSLogType) {
+        systemLogger.info("PKSLogger | MANAGER | Global Log Level changed to \(logLevel).")
+        let copy = LoggerConfiguration(
+            storeLogs: loggerGlobalConfiguration.storeLogs,
+            logLevel: logLevel,
+            hideLogs: loggerGlobalConfiguration.hideLogs,
+            subsystem: loggerGlobalConfiguration.subsystem,
+            category: loggerGlobalConfiguration.category
+        )
+        loggerGlobalConfiguration = copy
+    }
+
+    /// Set the global store logs setting.
+    ///
+    /// This function will set the global store logs setting and save it to the `UserDefaults`.
+    /// - Parameter storeLogs: A boolean value that indicates whether logs should be stored or not.
+    /// - Returns: Void
+    ///
+    public func setGlobalStoreLogs(_ storeLogs: Bool) {
+        systemLogger.info("PKSLogger | MANAGER | Global Store Logs setting changed to \(storeLogs ? "enabled" : "disabled").")
+        let copy = LoggerConfiguration(
+            storeLogs: storeLogs,
+            logLevel: loggerGlobalConfiguration.logLevel,
+            hideLogs: loggerGlobalConfiguration.hideLogs,
+            subsystem: loggerGlobalConfiguration.subsystem,
+            category: loggerGlobalConfiguration.category
+        )
+        loggerGlobalConfiguration = copy
+    }
+
+    /// Set the global hide logs setting.
+    ///
+    /// This function will set the global hide logs setting and save it to the `UserDefaults`.
+    /// - Parameter hideLogs: A boolean value that indicates whether logs should be hidden or not.
+    /// - Returns: Void
+    ///
+    public func setGlobalHideLogs(_ hideLogs: Bool) {
+        systemLogger.info("PKSLogger | MANAGER | Global Hide Logs setting changed to \(hideLogs ? "enabled" : "disabled").")
+        let copy = LoggerConfiguration(
+            storeLogs: loggerGlobalConfiguration.storeLogs,
+            logLevel: loggerGlobalConfiguration.logLevel,
+            hideLogs: hideLogs,
+            subsystem: loggerGlobalConfiguration.subsystem,
+            category: loggerGlobalConfiguration.category
+        )
+        loggerGlobalConfiguration = copy
+    }
 }
